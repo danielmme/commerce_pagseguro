@@ -6,7 +6,7 @@
     "repositories": [
       {
         "type": "composer",
-        "url": "https://packages.drupal.org/8"
+        "url": "https://github.com/danielmme/commerce_pagseguro_v2"
       }
     ]
 }
