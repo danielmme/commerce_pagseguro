@@ -1,7 +1,7 @@
 {
     "name": "danielmme/commercepagsegurov2",
     "type": "drupal-module",
-    "license": "GPL-2.0-or-later",
+    "license": "MIT",
     "description": "Provides commerce integration for Pagseguro",
     "minimum-stability": "dev",
     "repositories": [
