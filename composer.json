@@ -3,8 +3,10 @@
     "type": "drupal-module",
     "description": "Provides commerce integration for Pagseguro",
     "minimum-stability": "dev",
-    "support": {
-        "issues": "https://www.drupal.org/project/issues/commerce_pagseguro_v2",
-        "source": "http://cgit.drupalcode.org/commerce_pagseguro_v2"
-    }
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "https://packages.drupal.org/8"
+      }
+    ]
 }
