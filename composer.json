@@ -1,5 +1,5 @@
 {
-    "name": "commerce_pagseguro_v2",
+    "name": "danielmme/commercepagsegurov2",
     "type": "drupal-module",
     "description": "Provides commerce integration for Pagseguro",
     "minimum-stability": "dev",
