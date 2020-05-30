@@ -2,12 +2,9 @@
     "name": "commerce_pagseguro_v2",
     "type": "drupal-module",
     "description": "Provides commerce integration for Pagseguro",
-    "keywords": [
-    ],
-    "homepage": "https://www.drupal.org/project/commerce_pagseguro_v2",
     "minimum-stability": "dev",
     "support": {
         "issues": "https://www.drupal.org/project/issues/commerce_pagseguro_v2",
-        "source": "http://cgit.drupalcode.org/commerce_pagseguro_v2",
-    },
+        "source": "http://cgit.drupalcode.org/commerce_pagseguro_v2"
+    }
 }
