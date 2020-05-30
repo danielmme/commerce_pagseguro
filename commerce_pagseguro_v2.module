@@ -1,0 +1,38 @@
+<?php
+
+/**
+ * @file
+ * Contains commerce_pagseguro_v2.module.
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function commerce_pagseguro_v2_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the commerce_pagseguro_v2 module.
+    case 'help.page.commerce_pagseguro_v2':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('Provides commerce integration for Pagseguro') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function commerce_pagseguro_v2_theme() {
+  return [
+    'commerce_pagseguro_v2' => [
+      'render element' => 'children',
+    ],
+  ];
+}
+
+
+

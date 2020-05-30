@@ -1,0 +1,11 @@
+commerce_pagseguro:
+  version: 1.x
+  js:
+    js/commerce_pagseguro_v2.js: {}
+  dependencies:
+    - core/jquery
+    - core/drupalSettings
+pagseguro_sandbox:
+  version: 1.x
+  js:
+    https://stc.sandbox.pagseguro.uol.com.br/pagseguro/api/v2/checkout/pagseguro.directpayment.js: { type: external, minified: true }

@@ -1,0 +1,8 @@
+
+commerce_pagseguro_v2.notification_controller_get:
+  path: '/payment/notify'
+  defaults:
+    _controller: '\Drupal\commerce_pagseguro_v2\Controller\PaymentNotificationController::get'
+    _title: 'IPN'
+  requirements:
+    _permission: 'access content'
