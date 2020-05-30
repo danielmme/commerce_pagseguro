@@ -1,10 +1,13 @@
 {
     "name": "danielmme/commercepagsegurogv2",
     "type": "drupal-module",
+    "license": "MIT",
     "description": "Provides commerce integration for Pagseguro",
     "minimum-stability": "dev",
-    "support": {
-        "issues": "https://www.drupal.org/project/issues/commerce_pagseguro_v2",
-        "source": "http://cgit.drupalcode.org/commerce_pagseguro_v2"
-    }
+    "repositories": [
+      {
+        "type": "composer",
+        "url": "https://github.com/danielmme/commerce_pagseguro_v2"
+      }
+    ]
 }
