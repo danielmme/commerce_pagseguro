@@ -1,5 +1,5 @@
 {
-    "name": "danielmme/commercepagsegurogv2",
+    "name": "danielmme/commerce_pagseguro_v2",
     "type": "drupal-custom-module",
     "license": "MIT",
     "description": "Provides commerce integration for Pagseguro",
