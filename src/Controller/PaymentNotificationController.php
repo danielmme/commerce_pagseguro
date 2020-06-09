@@ -27,7 +27,7 @@ class PaymentNotificationController extends ControllerBase {
     if ($request->getMethod() == 'POST' && $request->getHost() == 'sandbox.pagseguro.uol.com.br') {
 
     try {
-      $pageseguro_geteway = \Drupal::config('commerce_payment.commerce_payment_gateway.pageseguro_geteway');
+      $pageseguro_geteway = \Drupal::config('commerce_payment.commerce_payment_gateway.pagseguro_gateway');
       $email = $pageseguro_geteway->get('configuration.email');
       $token = $pageseguro_geteway->get('configuration.token');
       $endpoint = $pageseguro_geteway->get('configuration.endpoint_sandbox');
