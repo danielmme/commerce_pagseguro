@@ -3,12 +3,14 @@
 namespace Drupal\commerce_pagseguro_v2\Controller;
 
 use Exception;
+use Drupal\Component\Plugin\Exception\PluginException;
 use Drupal\Core\Config\ConfigFactory;
 use Drupal\Core\Config\ConfigManager;
 use Drupal\Core\Controller\ControllerBase;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class PaymentNotificationController.
@@ -24,44 +26,71 @@ class PaymentNotificationController extends ControllerBase {
    */
   public function get(Request $request) {
 
-    if ($request->getMethod() == 'POST' && $request->getHost() == 'sandbox.pagseguro.uol.com.br') {
+   if ($request->getMethod() == 'POST' && $request->getHost() == 'sandbox.pagseguro.uol.com.br') {
 
-    try {
       $pageseguro_geteway = \Drupal::config('commerce_payment.commerce_payment_gateway.pagseguro_gateway');
-      $email = $pageseguro_geteway->get('configuration.email');
-      $token = $pageseguro_geteway->get('configuration.token');
-      $endpoint = $pageseguro_geteway->get('configuration.endpoint_sandbox');
-      $notificationCode = $request->request->get('notificationCode');
 
+      if (empty($configuration = $pageseguro_geteway->get('configuration'))) {      
+        throw new \UnexpectedValueException("It is not a valid config gateway");
+      }
+  
+      try {
+        $email = $configuration['email'];
+        $token = $configuration['token'];
+        $endpoint = $configuration['endpoint_sandbox'];
+        
+      }
+      catch (\UnexpectedValueException $e) {
+        watchdog_exception('commerce_pagseguro_v2', $e->getMessage());
+      }
+
+      if (empty($notificationCode = $request->request->get('notificationCode'))) {
+        throw new Exception("Requerid notificationCode param!");
+      }
+      
+      try {
         $url =  $endpoint . "/transactions/notifications/" . $notificationCode . "?email=". $email . "&token=" . $token;
         $client = \Drupal::httpclient();
         $response = $client->request('GET', $url, [] );
         $return = $response->getBody()->getContents();
-        $xml = simplexml_load_string(utf8_encode($return));
-        $json = json_decode(json_encode($xml));
+      }
+      catch (RequestException $e) {
+        watchdog_exception('commerce_pagseguro_v2', $e->getMessage());
+      }  
 
-        $status = $this->mapPagseguroStatus($json->status);
+      if (empty($return)) {
+        throw new Exception('PagSeguro API out of service!');
+      }
+     
+      $xml = simplexml_load_string(utf8_encode($return));
+      if (empty($xml)) {
+          throw new Exception('Invalid XML');
+      }
+
+      $json = json_decode(json_encode($xml));
+      if (empty($json)) {
+        throw new Exception('Invalid Json');
+      }
+     
+      $status = $this->mapPagseguroStatus($json->status);
+      try {
         $payments = \Drupal::entityTypeManager()
           ->getStorage('commerce_payment')
           ->loadByProperties(['remote_id' => $json->code]);
+
         $payment = reset($payments);
         $payment->setState($status);
         $payment->save();
-
-        return new JsonResponse('Sucesso!');
-
       }
       catch(Exception $e) {
-        $build = [
-          '#markup' => $e->getMessage(),
-        ];
-        return $build;
+        watchdog_exception('commerce_pagseguro_v2', $e->getMessage());
       }
+
+      return new JsonResponse('Sucesso!', 200);
     }
     else {
-      return new JsonResponse('Requisição não autorizada!');
+      return new JsonResponse('InSucesso!', 403);
     }
-
   }
 
   /**
@@ -76,6 +105,10 @@ class PaymentNotificationController extends ControllerBase {
    *   String status description.
    */
   private function mapPagseguroStatus($status) {
+
+    if (empty($status)) {
+      throw new Exception('PagSeguro not return correct status!');
+    }
     $return = '';
     switch ($status) {
       case '1':
