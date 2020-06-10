@@ -175,29 +175,8 @@ class Pagseguro extends OnsitePaymentGatewayBase {
     $this->assertPaymentState($payment, ['new']);
     $this->assertPaymentMethod($payment_method);
 
-    // The remote ID returned by the request.
-    $response->status;
-    switch ($response['status']) {
-      case '1':
-        $next_state = 'completed';
-      break;
-      case '2':
-        $next_state = 'completed';
-      break;
-      case '3':
-        $next_state = 'authorization';
-      break;
-      case '4':
-        $next_state = 'authorization';
-      break;
-      case '5':
-        $next_state = 'completed';
-      break;
-      case '6':
-        $next_state = 'authorization';
-      break;
-    }
-    $payment->setState($next_state);
+    $status = $this->mapPagseguroStatus($response['status']);
+    $payment->setState($status);
     $payment->setRemoteId($response['code']);
     $payment->save();
   }
@@ -275,12 +254,12 @@ class Pagseguro extends OnsitePaymentGatewayBase {
     switch ($status) {
       // t('Awaiting payment')
       case '1':
-        $return = 'pending';
+        $return = 'completed';
         break;
 
       // t('Under analysis')
       case '2':
-        $return = 'processing';
+        $return = 'completed';
         break;
 
       // t('Paid')
@@ -290,17 +269,17 @@ class Pagseguro extends OnsitePaymentGatewayBase {
 
       // t('In dispute')
       case '5':
-        $return = 'dispute';
+        $return = 'authorization';
         break;
 
       // t('Refunded')
       case '6':
-        $return = 'refunded';
+        $return = 'authorization';
         break;
 
       // t('Canceled')
       case '7':
-        $return = 'canceled';
+        $return = 'authorization';
         break;
     }
     return $return;

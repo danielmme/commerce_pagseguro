@@ -49,7 +49,7 @@ class PaymentNotificationController extends ControllerBase {
       }
 
       \Drupal::logger('commerce_pagseguro_v2')->notice($request->headers);
-      
+
       try {
         $url =  $endpoint . "/transactions/notifications/" . $notificationCode . "?email=". $email . "&token=" . $token;
         $client = \Drupal::httpclient();
@@ -87,7 +87,7 @@ class PaymentNotificationController extends ControllerBase {
       catch(Exception $e) {
         watchdog_exception('commerce_pagseguro_v2', $e->getMessage());
       }
-
+      //$response->headers->set('Access-Control-Allow-Origin', '*');
       return new JsonResponse($request->getHost(), 200);
     }
     else {
@@ -113,29 +113,35 @@ class PaymentNotificationController extends ControllerBase {
     }
     $return = '';
     switch ($status) {
+      // t('Awaiting payment')
       case '1':
-        $return = 'pending';
-        break;
+      $return = 'completed';
+      break;
 
-      case '2':
-        $return = 'processing';
-        break;
+    // t('Under analysis')
+    case '2':
+      $return = 'completed';
+      break;
 
-      case '3':
-        $return = 'completed';
-        break;
+    // t('Paid')
+    case '3':
+      $return = 'completed';
+      break;
 
-      case '5':
-        $return = 'dispute';
-        break;
+    // t('In dispute')
+    case '5':
+      $return = 'authorization';
+      break;
 
-      case '6':
-        $return = 'refunded';
-        break;
+    // t('Refunded')
+    case '6':
+      $return = 'authorization';
+      break;
 
-      case '7':
-        $return = 'canceled';
-        break;
+    // t('Canceled')
+    case '7':
+      $return = 'authorization';
+      break;
     }
     return $return;
   }
