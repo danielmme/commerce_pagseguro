@@ -47,6 +47,8 @@ class PaymentNotificationController extends ControllerBase {
       if (empty($notificationCode = $request->request->get('notificationCode'))) {
         throw new Exception("Requerid notificationCode param!");
       }
+
+      \Drupal::logger('commerce_pagseguro_v2')->notice($request->headers);
       
       try {
         $url =  $endpoint . "/transactions/notifications/" . $notificationCode . "?email=". $email . "&token=" . $token;
