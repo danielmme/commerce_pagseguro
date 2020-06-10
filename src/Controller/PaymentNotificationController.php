@@ -26,7 +26,7 @@ class PaymentNotificationController extends ControllerBase {
    */
   public function get(Request $request) {
 
-   if ($request->getMethod() == 'POST' && $request->getHost() == 'sandbox.pagseguro.uol.com.br') {
+   if ($request->getMethod() == 'POST') {
 
       $pageseguro_geteway = \Drupal::config('commerce_payment.commerce_payment_gateway.pagseguro_gateway');
 
@@ -86,10 +86,10 @@ class PaymentNotificationController extends ControllerBase {
         watchdog_exception('commerce_pagseguro_v2', $e->getMessage());
       }
 
-      return new JsonResponse('Sucesso!', 200);
+      return new JsonResponse($request->getHost(), 200);
     }
     else {
-      return new JsonResponse('InSucesso!', 403);
+      return new JsonResponse($request->getHost(), 403);
     }
   }
 
