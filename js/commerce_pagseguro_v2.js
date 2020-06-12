@@ -67,17 +67,19 @@
         var array = response;
         var select = document.querySelector('#installments');
         // create new option element
-        for (var i = 0; i <  4; i++) {
-          var option = document.createElement("option");
-          if (i == 0 && array[i].interestFree == true) {
-            option.text = 'Á vista no R$ valor de '+array[i].installmentAmount;
-            option.value = array[i].installmentAmount;
+        if (select.length <= 1) {
+          for (var i = 0; i <  4; i++) {
+            var option = document.createElement("option");
+            if (i == 0 && array[i].interestFree == true) {
+              option.text = 'Á vista no valor de R$ '+array[i].installmentAmount;
+              option.value = array[i].installmentAmount;
+            }
+            else if (i > 0 && array[i].interestFree == true) {
+              option.text = array[i].quantity+' vezes de R$ '+array[i].installmentAmount+' - valor total: R$  '+array[i].totalAmount;
+              option.value = array[i].installmentAmount;
+            }
+            select.add(option);
           }
-          else if (i > 0 && array[i].interestFree == true) {
-            option.text = array[i].quantity+' vezes de R$ '+array[i].installmentAmount+' - R$ valor total: '+array[i].totalAmount;
-            option.value = array[i].installmentAmount;
-          }
-          select.add(option);
         }
       }
 
